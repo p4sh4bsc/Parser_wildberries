@@ -14,7 +14,7 @@ import argparse
 
 options = webdriver.ChromeOptions()
 options.headless=True
-#options.add_argument("--no-sandbox")
+
 
 arg = argparse.ArgumentParser(description='Сортировка по ценам и количеству звёзд')
 arg.add_argument('-p', '--price', type=bool, const=True, default=False, nargs='?', help='Сортировка по убыванию цен')
