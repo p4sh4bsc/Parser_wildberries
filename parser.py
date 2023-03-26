@@ -14,7 +14,7 @@ import argparse
 
 options = webdriver.ChromeOptions()
 options.headless=True
-options.add_argument("--no-sandbox")
+#options.add_argument("--no-sandbox")
 
 arg = argparse.ArgumentParser(description='Сортировка по ценам и количеству звёзд')
 arg.add_argument('-p', '--price', type=bool, const=True, default=False, nargs='?', help='Сортировка по убыванию цен')
@@ -157,7 +157,13 @@ if __name__ == '__main__':
     count_of_pages = int(input("Введите количество страниц для парсинга: "))
     
     create_csv()
+    
+        
     for i in range(count_of_pages):
-        get_website(name_of_item, count_of_pages)
+        stats = os.stat(date_for_excel+".csv")
+        if stats.st_size >= 10_536:
+            print("creat new csv")
+            create_csv()
+        get_website(name_of_item, i)
         get_cards()
         load_data_to_csv()
