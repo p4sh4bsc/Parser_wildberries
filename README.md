@@ -3,9 +3,9 @@
 <table>
 <thead>
 <tr>
-<th>Стат</th>
-<th>Description</th>
-<th>Color Code</th>
+<th>Статус разработки функции</th>
+<th>Описание</th>
+<th>Цвет</th>
 </tr>
 </thead>
 <tbody>
@@ -42,8 +42,8 @@
 <thead>
 <tr>
 <th>Sr.No.</th>
-<th>Name</th>
-<th>Description</th>
+<th>Функция</th>
+<th>Описание работы функции</th>
 <th>Status</th>
 </tr>
 </thead>
@@ -67,22 +67,10 @@
 
 <tr>
 <td>3.</td>
-<td>Написание асинхронного парсера.</td>
-<td>Парсинг нескольких страниц одновременно.</td>
+<td>Написание GUI.</td>
+<td>Графический интерфейс парсера.</td>
 <td><a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/bb9ddd4cbb612a1892a069fcddbdb3c43b17a9c1527a2c799d8f1dee722b7410/68747470733a2f2f692e6962622e636f2f775774443853362f322e706e67"><img src="https://camo.githubusercontent.com/bb9ddd4cbb612a1892a069fcddbdb3c43b17a9c1527a2c799d8f1dee722b7410/68747470733a2f2f692e6962622e636f2f775774443853362f322e706e67" alt="Not-Working" data-canonical-src="https://i.ibb.co/wWtD8S6/2.png" style="max-width: 100%;"></a></td>
 </tr>
 
 </tbody>
 </table>
-
-
-
-
-
-
-
-1. Написание асинхронного парсера. ❌
-
-~~2. Запуск скрипта по времени.~~ ✅
-
-3. Написание GUI ❌
