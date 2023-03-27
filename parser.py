@@ -131,7 +131,7 @@ def create_csv():
     global date_for_excel
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     date_for_excel = date_now.replace(" ","_").replace(":", "-")
-    with open("./for_csv/"+date_for_excel+".csv", "w", encoding="utf-8", newline="") as f:
+    with open(date_for_excel+".csv", "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f, delimiter=";")
         writer.writerow([" ID", "Название товара", "Цена товара", "Число отзывов", "Дата доставки"])
         
@@ -147,7 +147,7 @@ def load_data_to_csv():
     
     for i in range(len(list_of_items)):
         
-        with open("./for_csv/"+date_for_excel+".csv", "a", encoding="utf-8", newline="") as f:
+        with open(date_for_excel+".csv", "a", encoding="utf-8", newline="") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(list_of_items[i])
 
@@ -156,7 +156,7 @@ def get_and_save():
     
         
     for i in range(count_of_pages):
-        stats = os.stat("./for_csv/"+date_for_excel+".csv")
+        stats = os.stat(date_for_excel+".csv")
         if stats.st_size >= 10_536:
             print("creat new csv")
             create_csv()
