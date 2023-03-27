@@ -171,7 +171,7 @@ if __name__ == '__main__':
     count_of_pages = int(input("Введите количество страниц для парсинга: "))
     time_to_launch = int(input("Через сколько часов запустить скрипт: "))
     
-    schedule.every(time_to_launch).minutes.do(get_and_save)
+    schedule.every(time_to_launch).hours.do(get_and_save)
     get_and_save()
     while True:
         schedule.run_pending()
