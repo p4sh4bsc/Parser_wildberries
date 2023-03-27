@@ -10,7 +10,7 @@ from datetime import datetime
 import csv
 from selenium.webdriver.common.keys import Keys 
 import argparse
-
+import schedule
 
 options = webdriver.ChromeOptions()
 options.headless=True
@@ -131,7 +131,7 @@ def create_csv():
     global date_for_excel
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     date_for_excel = date_now.replace(" ","_").replace(":", "-")
-    with open(date_for_excel+".csv", "w", encoding="utf-8", newline="") as f:
+    with open("./for_csv/"+date_for_excel+".csv", "w", encoding="utf-8", newline="") as f:
         writer = csv.writer(f, delimiter=";")
         writer.writerow([" ID", "Название товара", "Цена товара", "Число отзывов", "Дата доставки"])
         
@@ -147,23 +147,31 @@ def load_data_to_csv():
     
     for i in range(len(list_of_items)):
         
-        with open(date_for_excel+".csv", "a", encoding="utf-8", newline="") as f:
+        with open("./for_csv/"+date_for_excel+".csv", "a", encoding="utf-8", newline="") as f:
             writer = csv.writer(f, delimiter=";")
             writer.writerow(list_of_items[i])
 
-if __name__ == '__main__':
-    tprint("Parser Wildberries")
-    name_of_item = str(input("Введите название товара: "))
-    count_of_pages = int(input("Введите количество страниц для парсинга: "))
-    
+def get_and_save():
     create_csv()
     
         
     for i in range(count_of_pages):
-        stats = os.stat(date_for_excel+".csv")
+        stats = os.stat("./for_csv/"+date_for_excel+".csv")
         if stats.st_size >= 10_536:
             print("creat new csv")
             create_csv()
         get_website(name_of_item, i)
         get_cards()
         load_data_to_csv()
+
+
+if __name__ == '__main__':
+    tprint("Parser Wildberries")
+    name_of_item = str(input("Введите название товара: "))
+    count_of_pages = int(input("Введите количество страниц для парсинга: "))
+    time_to_launch = int(input("Через сколько часов запустить скрипт: "))
+    
+    schedule.every(time_to_launch).minutes.do(get_and_save)
+    get_and_save()
+    while True:
+        schedule.run_pending()
