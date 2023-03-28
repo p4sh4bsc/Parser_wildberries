@@ -11,9 +11,13 @@ import csv
 from selenium.webdriver.common.keys import Keys 
 import argparse
 import schedule
+import asyncio
+import aiohttp
 
 options = webdriver.ChromeOptions()
 options.headless=True
+options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
 
 
 arg = argparse.ArgumentParser(description='Сортировка по ценам и количеству звёзд')
@@ -22,7 +26,6 @@ arg.add_argument('-s', '--stars', type=bool, const=True, default=False, nargs='?
 param = arg.parse_args()
 
 def get_website(item, page):
-    
     url = 'https://www.wildberries.ru/catalog/0/search.aspx?page='+str(page)+'&sort=popular&search='+item
     print(url)
     
@@ -58,8 +61,9 @@ def get_cards():
     price_of_cards = []
     count_of_stars = []
     delivery_dates = []
-    
     list_of_items = []
+    
+    
     
     
     driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
@@ -153,17 +157,47 @@ def load_data_to_csv():
 
 def get_and_save():
     create_csv()
-    
-        
-    for i in range(count_of_pages):
-        stats = os.stat(date_for_excel+".csv")
-        if stats.st_size >= 10_536:
-            print("creat new csv")
+    for page in range(1, count_of_pages+1):
+        try:
+            stats = os.stat(date_for_excel+".csv")
+
+            if stats.st_size >= 10_000:
+                print("creat new csv")
+                create_csv()
+        except:
             create_csv()
-        get_website(name_of_item, i)
+        get_website(name_of_item, page)
         get_cards()
         load_data_to_csv()
 
+
+async def get_data_from_pages(session, item, page):
+    url = 'https://www.wildberries.ru/catalog/0/search.aspx?page='+str(page)+'&sort=popular&search='+item
+    
+    async with session.get(url=url) as response:
+        response_text = await response.text()
+        get_and_save(item, page)
+    
+    
+        print(f"Обработал страницу {page}")
+        
+async def gather_data(pages, item):
+    
+    
+    
+    async with aiohttp.ClientSession() as session:
+        tasks = []
+        
+        for page in range(1, pages+1):
+            task = asyncio.create_task(get_data_from_pages(session, item, page))
+            tasks.append(task)
+        await asyncio.gather(*tasks)
+
+
+
+def main(count_of_pages, item):
+    asyncio.run(gather_data(count_of_pages, item))
+    
 
 if __name__ == '__main__':
     tprint("Parser Wildberries")
@@ -171,7 +205,9 @@ if __name__ == '__main__':
     count_of_pages = int(input("Введите количество страниц для парсинга: "))
     time_to_launch = int(input("Через сколько часов запустить скрипт: "))
     
+    
     schedule.every(time_to_launch).hours.do(get_and_save)
     get_and_save()
+    
     while True:
         schedule.run_pending()
