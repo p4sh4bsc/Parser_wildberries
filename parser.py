@@ -49,11 +49,6 @@ def get_website(item, page):
         driver.quit()
         
 def get_cards():
-    global id_of_cards
-    global name_of_cards
-    global price_of_cards
-    global count_of_stars
-    global delivery_dates
     global list_of_items
     
     id_of_cards = []
